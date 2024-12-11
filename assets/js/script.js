@@ -18,17 +18,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+/**
+ * the main game loop called when script is first loaded 
+ *and after user's answer has been processed
+ */
+
 function runGame(){
-    
+    //creates 2 random numbers between 1 and 25 
+ let num1 = math.floor (math.random() * 25) + 1;
+ let num2 = math.floor (math.random() * 25) + 1;   
     }
 
 function checkAnswer(){
     
-    }
+    } git
 
 function calculateCorrectAnswer(){
     
-    }
+    }  
 
 function incrementScore(){
     
