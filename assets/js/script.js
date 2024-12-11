@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let button of buttons) {
         button.addEventListener("click", function () {
             if (this.getAttribute("data-type") === "submit") {
-                alert("You clicked submit!");
+                checkAnswer();
             } else {
                 let gameType = this.getAttribute("data-type");
                 runGame(gameType);
@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Start the game with addition
     runGame("addition");
 });
 
@@ -22,11 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 function runGame(gameType) {
     // Creates 2 random numbers between 1 and 25
-    let num1 = Math.floor(Math.random() * 25) + 1; 
-    let num2 = Math.floor(Math.random() * 25) + 1; 
+    let num1 = Math.floor(Math.random() * 25) + 1;
+    let num2 = Math.floor(Math.random() * 25) + 1;
 
+    // Display the correct question based on the game type
     if (gameType === "addition") {
         displayAdditionQuestion(num1, num2);
+    } else if (gameType === "subtract") {
+        displaySubtractQuestion(num1, num2);
+    } else if (gameType === "multiply") {
+        displayMultiplicationQuestion(num1, num2);
+    } else if (gameType === "division") {
+        displayDivisionQuestion(num1, num2);
     } else {
         alert(`Unknown game type: ${gameType}`);
         throw `Unknown game type: ${gameType}. Aborting!`;
@@ -43,52 +51,83 @@ function displayAdditionQuestion(operand1, operand2) {
 }
 
 /**
- * Gets the operands (numbers) and the operator (+, -, *, /) directly from the DOM
- * and returns the correct answer.
+ * Displays the subtraction question
  */
-function calculateCorrectAnswer() {
-    let operand1 = parseInt(document.getElementById("operand1").innerText);
-    let operand2 = parseInt(document.getElementById("operand2").innerText);
-    let operator = document.getElementById("operator").innerText; // Corrected to get text, not parseInt
+function displaySubtractQuestion(operand1, operand2) {
+    document.getElementById("operand1").textContent = operand1;
+    document.getElementById("operand2").textContent = operand2;
+    document.getElementById("operator").textContent = "-";
+}
 
-    if (operator === "+") {
-        return [operand1 + operand2, "addition"];
+/**
+ * Displays the multiplication question
+ */
+function displayMultiplicationQuestion(operand1, operand2) {
+    document.getElementById("operand1").textContent = operand1;
+    document.getElementById("operand2").textContent = operand2;
+    document.getElementById("operator").textContent = "*";
+}
+
+/**
+ * Displays the division question
+ */
+function displayDivisionQuestion(operand1, operand2) {
+    document.getElementById("operand1").textContent = operand1;
+    document.getElementById("operand2").textContent = operand2;
+    document.getElementById("operator").textContent = "/";
+}
+
+/**
+ * Checks the answer provided by the user
+ */
+function checkAnswer() {
+    let correctAnswer = calculateCorrectAnswer();
+    let userAnswer = parseInt(document.getElementById("answer-box").value);
+
+    if (userAnswer === correctAnswer) {
+        incrementScore();
+        alert("Hey! You got it right!");
     } else {
-        throw `Unimplemented operator: ${operator}. Aborting!`;
+        incrementWrongAnswer();
+        alert(`Awwww.... you answered ${userAnswer} but it was ${correctAnswer}`);
     }
 }
 
 /**
- * Placeholder for the incrementScore function
+ * Calculates the correct answer based on the current operator
+ */
+function calculateCorrectAnswer() {
+    let operand1 = parseInt(document.getElementById("operand1").textContent);
+    let operand2 = parseInt(document.getElementById("operand2").textContent);
+    let operator = document.getElementById("operator").textContent;
+
+    if (operator === "+") {
+        return operand1 + operand2;
+    } else if (operator === "-") {
+        return operand1 - operand2;
+    } else if (operator === "*") {
+        return operand1 * operand2;
+    } else if (operator === "/") {
+        return operand1 / operand2;
+    } else {
+        throw `Unimplemented operator ${operator}. Aborting!`;
+    }
+}
+
+/**
+ * Increments the score when the answer is correct
  */
 function incrementScore() {
-    // Logic to increment the score will go here
+    let currentScore = parseInt(document.getElementById("score").textContent);
+    currentScore++;
+    document.getElementById("score").textContent = currentScore;
 }
 
 /**
- * Placeholder for the incrementWrongAnswer function
+ * Increments the incorrect answer count when the answer is wrong
  */
 function incrementWrongAnswer() {
-    // Logic to increment the wrong answer count will go here
-}
-
-/**
- * Placeholder for the displaySubtractQuestion function
- */
-function displaySubtractQuestion() {
-    // Logic to display subtraction questions will go here
-}
-
-/**
- * Placeholder for the displayMultiplicationQuestion function
- */
-function displayMultiplicationQuestion() {
-    // Logic to display multiplication questions will go here
-}
-
-/**
- * Placeholder for the displayDivisionQuestion function
- */
-function displayDivisionQuestion() {
-    // Logic to display division questions will go here
+    let currentWrong = parseInt(document.getElementById("incorrect").textContent);
+    currentWrong++;
+    document.getElementById("incorrect").textContent = currentWrong;
 }
